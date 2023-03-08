@@ -1,32 +1,16 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
 import './App.css'
+import TableInput from './components/TableInput'
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <h1>I-Bond Calculator</h1>
+      {/* TODO: add chart here */}
+      <TableInput bonds={[
+        {dateIssued: new Date(2022, 3, 1), principal: 10000},
+        {dateIssued: new Date(2022, 9, 1), principal: 10000},
+        {dateIssued: new Date(2023, 0, 1), principal: 10000},
+      ]}/>
     </div>
   )
 }
