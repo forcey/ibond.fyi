@@ -1,7 +1,12 @@
 .tableRow {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
     margin: 0.5rem 0;
+}
+
+.tableCell {
+    padding: 5px;
+    width: calc(25% - 10px);
 }
