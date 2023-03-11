@@ -116,3 +116,9 @@ export const inflationRateTable: Rate[] = [
     parseRate("November 1, 1998", "0.86%"),
     parseRate("September 1, 1998", "0.62%"),
 ];
+
+export function lookupRate(date: Date): { fixedRate: Rate | undefined, inflationRate: Rate | undefined } {
+    const fixedRate = fixedRateTable.find(rate => rate.date <= date);
+    const inflationRate = inflationRateTable.find(rate => rate.date <= date);
+    return { fixedRate, inflationRate };
+}
