@@ -16,3 +16,10 @@ test("compositeRate", () => {
     const composite = compositeRate(fixedRate, inflationRate);
     expect(composite).toBe(0.0689);
 })
+
+test('calculateValue', () => {
+    const bond = new Bond(new Date(2022, 3, 1), 10000);
+    const values = bond.calculateValue();
+    // TODO: This test is not complete.
+    expect(values).toContain([]);
+})
