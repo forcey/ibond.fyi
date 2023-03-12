@@ -1,3 +1,4 @@
+import { roundToDecimal } from "../utils/math";
 import { lookupRate, Rate } from "./rateTable";
 
 type BondValue = {
@@ -45,7 +46,7 @@ export class Bond {
 
             // https://www.bogleheads.org/wiki/I_savings_bonds#How_interest_is_calculated
             const newValue = bondValue.principal * Math.pow(1 + bondValue.compositeRate / 2, months / 6);
-            bondValue.value = Math.round((newValue + Number.EPSILON) * 100) / 100;
+            bondValue.value = roundToDecimal(newValue, 2);
 
             // Inflation rate changes every 6 months. Use this code path for the initial rate as well.
             if (months % 6 == 0) {
@@ -69,5 +70,5 @@ export class Bond {
 
 export function compositeRate(fixedRate: Rate, inflationRate: Rate): number {
     const composite = fixedRate.rate + 2 * inflationRate.rate + fixedRate.rate * inflationRate.rate;
-    return Math.round((composite + Number.EPSILON) * 10000) / 10000;
+    return roundToDecimal(composite, 4);
 }
