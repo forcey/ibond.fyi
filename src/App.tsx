@@ -2,6 +2,7 @@ import './App.css';
 import TableInput from './components/TableInput';
 import { Bond, compositeRate } from './model/bond';
 import { lookupRate } from './model/rateTable';
+import { Months } from './utils/date';
 
 function App() {
   const currentRates = lookupRate(new Date());
@@ -22,9 +23,9 @@ function App() {
 
       {/* TODO: add chart here */}
       <TableInput bonds={[
-        new Bond(new Date(2022, 3, 1), 10000),
-        new Bond(new Date(2022, 9, 1), 10000),
-        new Bond(new Date(2023, 0, 1), 10000),
+        new Bond(new Date(2022, Months.April, 1), 10000),
+        new Bond(new Date(2022, Months.October, 1), 10000),
+        new Bond(new Date(2023, Months.January, 1), 10000),
       ]} />
     </div>
   )

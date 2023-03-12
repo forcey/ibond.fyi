@@ -1,8 +1,9 @@
 import { assert, expect, test } from 'vitest';
+import { Months } from '../utils/date';
 import { Bond ,compositeRate} from './bond';
 
 test('constructor', () => {
-    const bond = new Bond(new Date(2022, 3, 1), 1000);
+    const bond = new Bond(new Date(2022, Months.April, 1), 1000);
     expect(bond.id).toBeDefined();
     expect(bond.dateIssued.toDateString()).toBe('Fri Apr 01 2022');
     expect(bond.principal).toBe(1000);
@@ -11,19 +12,19 @@ test('constructor', () => {
 test("compositeRate", () => {
     // https://www.treasurydirect.gov/savings-bonds/i-bonds/i-bonds-interest-rates/
     // Example for November 2022.
-    const fixedRate = { date: new Date(2022, 10, 1), rate: 0.004 };
-    const inflationRate = { date: new Date(2022, 10, 1), rate: 0.0324 };
+    const fixedRate = { date: new Date(2022, Months.October, 1), rate: 0.004 };
+    const inflationRate = { date: new Date(2022, Months.October, 1), rate: 0.0324 };
     const composite = compositeRate(fixedRate, inflationRate);
     expect(composite).toBe(0.0689);
 })
 
 test('calculateValue', () => {
-    const bond = new Bond(new Date(2022, 3, 1), 10000);
+    const bond = new Bond(new Date(2022, Months.April, 1), 10000);
     const values = bond.calculateValue();
     expect(values).toEqual([
         {
           "compositeRate": 0.0712,
-          "date": new Date(2022, 3),
+          "date": new Date(2022, Months.April),
           "fixedRate": 0,
           "inflationRate": 0.0356,
           "multiplier": 400,
@@ -32,7 +33,7 @@ test('calculateValue', () => {
         },
         {
           "compositeRate": 0.0712,
-          "date": new Date(2022, 4),
+          "date": new Date(2022, Months.May),
           "fixedRate": 0,
           "inflationRate": 0.0356,
           "multiplier": 400,
@@ -41,7 +42,7 @@ test('calculateValue', () => {
         },
         {
           "compositeRate": 0.0712,
-          "date": new Date(2022, 5),
+          "date": new Date(2022, Months.June),
           "fixedRate": 0,
           "inflationRate": 0.0356,
           "multiplier": 400,
@@ -50,7 +51,7 @@ test('calculateValue', () => {
         },
         {
           "compositeRate": 0.0712,
-          "date": new Date(2022, 6),
+          "date": new Date(2022, Months.July),
           "fixedRate": 0,
           "inflationRate": 0.0356,
           "multiplier": 400,
@@ -59,7 +60,7 @@ test('calculateValue', () => {
         },
         {
           "compositeRate": 0.0712,
-          "date": new Date(2022, 7),
+          "date": new Date(2022, Months.August),
           "fixedRate": 0,
           "inflationRate": 0.0356,
           "multiplier": 400,
@@ -68,7 +69,7 @@ test('calculateValue', () => {
         },
         {
           "compositeRate": 0.0712,
-          "date": new Date(2022, 8),
+          "date": new Date(2022, Months.September),
           "fixedRate": 0,
           "inflationRate": 0.0356,
           "multiplier": 400,
@@ -77,7 +78,7 @@ test('calculateValue', () => {
         },
         {
           "compositeRate": 0.0962,
-          "date": new Date(2022, 9),
+          "date": new Date(2022, Months.October),
           "fixedRate": 0,
           "inflationRate": 0.0481,
           "multiplier": 400,
@@ -86,7 +87,7 @@ test('calculateValue', () => {
         },
         {
           "compositeRate": 0.0962,
-          "date": new Date(2022, 10),
+          "date": new Date(2022, Months.November),
           "fixedRate": 0,
           "inflationRate": 0.0481,
           "multiplier": 400,
@@ -95,7 +96,7 @@ test('calculateValue', () => {
         },
         {
           "compositeRate": 0.0962,
-          "date": new Date(2022, 11),
+          "date": new Date(2022, Months.December),
           "fixedRate": 0,
           "inflationRate": 0.0481,
           "multiplier": 400,
@@ -104,7 +105,7 @@ test('calculateValue', () => {
         },
         {
           "compositeRate": 0.0962,
-          "date": new Date(2023, 0),
+          "date": new Date(2023, Months.January),
           "fixedRate": 0,
           "inflationRate": 0.0481,
           "multiplier": 400,
@@ -113,7 +114,7 @@ test('calculateValue', () => {
         },
         {
           "compositeRate": 0.0962,
-          "date": new Date(2023, 1),
+          "date": new Date(2023, Months.February),
           "fixedRate": 0,
           "inflationRate": 0.0481,
           "multiplier": 400,
@@ -122,7 +123,7 @@ test('calculateValue', () => {
         },
         {
           "compositeRate": 0.0962,
-          "date": new Date(2023, 2),
+          "date": new Date(2023, Months.March),
           "fixedRate": 0,
           "inflationRate": 0.0481,
           "multiplier": 400,
