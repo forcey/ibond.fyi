@@ -12,3 +12,7 @@ export const Months = {
     November: 10,
     December: 11,
 }
+
+export function formatMonth(date: Date): string {
+    return date.toLocaleDateString("en-US", { "month": "short", "year": "numeric" });
+}

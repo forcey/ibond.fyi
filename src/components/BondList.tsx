@@ -1,6 +1,7 @@
 import * as Accordion from '@radix-ui/react-accordion';
 import { ChevronDownIcon } from '@radix-ui/react-icons';
 import { Bond, BondValue } from '../model/bond';
+import { formatMonth } from '../utils/date';
 import { formatDollars, formatPercent } from '../utils/math';
 import './BondList.css';
 
@@ -12,8 +13,8 @@ function TableCell({ label, children, style }: { label?: string, children: React
 }
 
 function BondDetailTable({ values }: { values: BondValue[] }): JSX.Element {
-    const valueRows = values.map(value => <tr>
-        <td>{value.date.toLocaleDateString("en-US")}</td>
+    const valueRows = values.map((value, index) => <tr key={index}>
+        <td>{formatMonth(value.date)}</td>
         <td>{formatPercent(value.compositeRate, 2)}</td>
         <td>{formatDollars(value.value * value.multiplier)}</td>
         <td>TODO</td>
@@ -24,7 +25,7 @@ function BondDetailTable({ values }: { values: BondValue[] }): JSX.Element {
         <table>
             <thead>
                 <tr>
-                    <th>Month</th>
+                    <th style={{'minWidth': '5em'}}>Month</th>
                     <th>Composite Rate</th>
                     <th>Accrued Value</th>
                     <th>Redeemable Value</th>
@@ -46,7 +47,7 @@ function BondRow({ bond }: { bond: Bond }): JSX.Element {
     return <Accordion.Item value={bond.id} className="AccordionItem">
         <Accordion.Header>
             <div className='tableRow'>
-                <TableCell label="Date Issued">{bond.dateIssued.toLocaleDateString("en-US")}</TableCell>
+                <TableCell label="Month Issued">{formatMonth(bond.dateIssued)}</TableCell>
                 <TableCell label="Principal">{formatDollars(bond.principal)}</TableCell>
                 <TableCell label="Value">{formatDollars(latestValue)}</TableCell>
                 <TableCell style={{ "width": "auto", "marginLeft": "auto" }}>
