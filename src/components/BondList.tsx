@@ -12,13 +12,30 @@ function TableCell({ label, children, style }: { label?: string, children: React
 }
 
 function BondDetailTable({ values }: { values: BondValue[] }): JSX.Element {
-    // TODO: refactor this as a table.
-    const valueRows = values.map(value => <div className='tableRow'>
-        <div className='tableCell'>{value.date.toLocaleDateString("en-US")}</div>
-        <div className='tableCell'>{formatDollars(value.value * value.multiplier)}</div>
-        <div className='tableCell'>{formatPercent(value.compositeRate, 2)}</div>
-    </div>);
-    return <>{valueRows}</>;
+    const valueRows = values.map(value => <tr>
+        <td>{value.date.toLocaleDateString("en-US")}</td>
+        <td>{formatPercent(value.compositeRate, 2)}</td>
+        <td>{formatDollars(value.value * value.multiplier)}</td>
+        <td>TODO</td>
+        <td>TODO</td>
+    </tr>);
+    // Make the table area scrollable.
+    return <div style={{ "overflow": "auto" }}>
+        <table>
+            <thead>
+                <tr>
+                    <th>Month</th>
+                    <th>Composite Rate</th>
+                    <th>Accrued Value</th>
+                    <th>Redeemable Value</th>
+                    <th>Effective Rate</th>
+                </tr>
+            </thead>
+            <tbody>
+                {valueRows}
+            </tbody>
+        </table>
+    </div>;
 }
 
 function BondRow({ bond }: { bond: Bond }): JSX.Element {

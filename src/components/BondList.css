@@ -17,6 +17,10 @@
     font-size: 50%;
 }
 
+th, td {
+    font-size: 80%;
+}
+
 /* reset */
 button,
 h3 {
