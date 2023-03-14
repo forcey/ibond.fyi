@@ -21,11 +21,11 @@ function BondDetailTable({ values }: { values: BondValue[] }): JSX.Element {
         <td>TODO</td>
     </tr>);
     // Make the table area scrollable.
-    return <div style={{ "overflow": "auto" }}>
+    return <div style={{ "overflow": "auto", "paddingBottom": "8px" }}>
         <table>
             <thead>
                 <tr>
-                    <th style={{'minWidth': '5em'}}>Month</th>
+                    <th style={{ 'minWidth': '5em' }}>Month</th>
                     <th>Composite Rate</th>
                     <th>Accrued Value</th>
                     <th>Redeemable Value</th>
