@@ -1,7 +1,7 @@
 import { roundToDecimal } from "../utils/math";
 import { lookupRate, Rate } from "./rateTable";
 
-type BondValue = {
+export type BondValue = {
     date: Date,
 
     fixedRate: number,
