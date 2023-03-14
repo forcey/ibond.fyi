@@ -23,6 +23,7 @@ function App() {
 
       {/* TODO: add chart here */}
       <BondList bonds={[
+        new Bond(new Date(2021, Months.April, 1), 10000),
         new Bond(new Date(2022, Months.April, 1), 10000),
         new Bond(new Date(2022, Months.October, 1), 10000),
         new Bond(new Date(2023, Months.January, 1), 10000),

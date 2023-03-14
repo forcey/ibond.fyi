@@ -66,6 +66,17 @@ export class Bond {
         }
         return values;
     }
+
+    redeemableValue(values: BondValue[], index: number): number | undefined {
+        if (index < 12) {
+            return undefined;
+        }
+        if (index < 60) {
+            const value3MonthsAgo = values[index - 3];
+            return value3MonthsAgo.multiplier * value3MonthsAgo.value;
+        }
+        return values[index].multiplier * values[index].value;
+    }
 }
 
 export function compositeRate(fixedRate: Rate, inflationRate: Rate): number {

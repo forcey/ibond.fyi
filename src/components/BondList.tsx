@@ -12,14 +12,17 @@ function TableCell({ label, children, style }: { label?: string, children: React
     </div>;
 }
 
-function BondDetailTable({ values }: { values: BondValue[] }): JSX.Element {
-    const valueRows = values.map((value, index) => <tr key={index}>
-        <td>{formatMonth(value.date)}</td>
-        <td>{formatPercent(value.compositeRate, 2)}</td>
-        <td>{formatDollars(value.value * value.multiplier)}</td>
-        <td>TODO</td>
-        <td>TODO</td>
-    </tr>);
+function BondDetailTable({ bond, values }: { bond: Bond, values: BondValue[] }): JSX.Element {
+    const valueRows = values.map((value, index) => {
+        const redeemableValue = bond.redeemableValue(values, index);
+        return <tr key={index}>
+            <td>{formatMonth(value.date)}</td>
+            <td>{formatPercent(value.compositeRate, 2)}</td>
+            <td>{formatDollars(value.value * value.multiplier)}</td>
+            <td>{redeemableValue === undefined ? '-' : formatDollars(redeemableValue)}</td>
+            <td>TODO</td>
+        </tr>
+    });
     // Make the table area scrollable.
     return <div style={{ "overflow": "auto", "paddingBottom": "8px" }}>
         <table>
@@ -33,16 +36,16 @@ function BondDetailTable({ values }: { values: BondValue[] }): JSX.Element {
                 </tr>
             </thead>
             <tbody>
-                {valueRows}
+                {valueRows.reverse()}
             </tbody>
         </table>
     </div>;
 }
 
 function BondRow({ bond }: { bond: Bond }): JSX.Element {
-    const values = bond.calculateValue().reverse();
+    const values = bond.calculateValue();
 
-    const latestValue = values[0].value * values[0].multiplier;
+    const latestValue = values[values.length - 1].value * values[values.length - 1].multiplier;
 
     return <Accordion.Item value={bond.id} className="AccordionItem">
         <Accordion.Header>
@@ -58,7 +61,7 @@ function BondRow({ bond }: { bond: Bond }): JSX.Element {
             </div>
         </Accordion.Header>
         <Accordion.Content>
-            <BondDetailTable values={values}></BondDetailTable>
+            <BondDetailTable bond={bond} values={values}></BondDetailTable>
         </Accordion.Content>
     </Accordion.Item>
 }
