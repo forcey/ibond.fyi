@@ -4,11 +4,17 @@
     justify-content: flex-start;
     align-items: center;
     margin: 0.5rem 0;
+    padding-left: 0.6em;
 }
 
 .tableCell {
-    padding: 5px;
-    width: calc(25% - 10px);
+    padding: 4px;
+    width: calc(25% - 8px);
+    text-align: left;
+}
+
+.tableCell .label {
+    font-size: 50%;
 }
 
 /* reset */
@@ -23,4 +29,18 @@ h3 {
 
 .AccordionTrigger[data-state='open']>.AccordionChevron {
     transform: rotate(180deg);
+}
+
+.AccordionItem {
+    border-radius: 8px;
+}
+
+.AccordionItem:nth-child(odd) {
+    background: #1a1a1a;
+}
+
+@media (prefers-color-scheme: light) {
+    .AccordionItem:nth-child(odd) {
+        background: #f9f9f9;
+    }
 }
