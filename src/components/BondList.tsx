@@ -1,5 +1,5 @@
 import * as Accordion from '@radix-ui/react-accordion';
-import { ChevronDownIcon } from '@radix-ui/react-icons';
+import { ChevronDownIcon, InfoCircledIcon } from '@radix-ui/react-icons';
 import { Bond, BondValue } from '../model/bond';
 import { formatMonth } from '../utils/date';
 import { formatDollars, formatPercent } from '../utils/math';
@@ -19,7 +19,16 @@ function BondDetailTable({ bond, values }: { bond: Bond, values: BondValue[] }):
             <td>{formatMonth(value.date)}</td>
             <td>{formatPercent(value.compositeRate, 2)}</td>
             <td>{formatDollars(value.value * value.multiplier)}</td>
-            <td>{redeemableValue === undefined ? '-' : formatDollars(redeemableValue)}</td>
+            <td>
+                <span className={redeemableValue.isRedeemable ? 'redeemable' : 'unredeemable'}>
+                    {formatDollars(redeemableValue.value)}
+                    {redeemableValue.isRedeemable ||
+                        <button className="IconButton">
+                            <InfoCircledIcon />
+                        </button>
+                    }
+                </span>
+            </td>
             <td>TODO</td>
         </tr>
     });
@@ -45,7 +54,7 @@ function BondDetailTable({ bond, values }: { bond: Bond, values: BondValue[] }):
 function BondRow({ bond }: { bond: Bond }): JSX.Element {
     const values = bond.calculateValue();
 
-    const latestValue = values[values.length - 1].value * values[values.length - 1].multiplier;
+    const latestValue = bond.redeemableValue(values, values.length-1).value;
 
     return <Accordion.Item value={bond.id} className="AccordionItem">
         <Accordion.Header>

@@ -13,6 +13,15 @@ export type BondValue = {
     multiplier: number,
 }
 
+export function totalValue(value: BondValue): number {
+    return value.value * value.multiplier;
+}
+
+export type RedeemableValue = {
+    value: number,
+    isRedeemable: boolean,
+}
+
 export class Bond {
     id: string;
     dateIssued: Date;
@@ -67,15 +76,24 @@ export class Bond {
         return values;
     }
 
-    redeemableValue(values: BondValue[], index: number): number | undefined {
-        if (index < 12) {
-            return undefined;
+    redeemableValue(values: BondValue[], index: number): RedeemableValue {
+        if (index < 3) {
+            return {
+                value: totalValue(values[0]),
+                isRedeemable: false,
+            }
         }
         if (index < 60) {
             const value3MonthsAgo = values[index - 3];
-            return value3MonthsAgo.multiplier * value3MonthsAgo.value;
+            return {
+                value: totalValue(value3MonthsAgo),
+                isRedeemable: index >= 12,
+            }
         }
-        return values[index].multiplier * values[index].value;
+        return {
+            value: totalValue(values[index]),
+            isRedeemable: true,
+        }
     }
 }
 
