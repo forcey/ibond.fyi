@@ -55,7 +55,10 @@ function BondDetailTable({ bond, values }: { bond: Bond, values: BondValue[] }):
     </div>;
 }
 
-function BondRow({ bond }: { bond: Bond }): JSX.Element {
+function BondRow({ bond, onDeleteBondCommand }: {
+    bond: Bond,
+    onDeleteBondCommand: (id: string) => void
+}): JSX.Element {
     const values = bond.calculateValue();
 
     const latestValue = bond.redeemableValue(values, values.length - 1).value;
@@ -76,15 +79,20 @@ function BondRow({ bond }: { bond: Bond }): JSX.Element {
         <Accordion.Content>
             <div style={{ "display": "flex", "justifyContent": "center" }}>
                 <button className="editButton"><Pencil1Icon className='inlineIcon' /> Edit</button>
-                <button className="editButton"><TrashIcon className='inlineIcon' /> Delete</button>
+                <button className="editButton" onClick={e => onDeleteBondCommand(bond.id)}><TrashIcon className='inlineIcon' /> Delete</button>
             </div>
             <BondDetailTable bond={bond} values={values}></BondDetailTable>
         </Accordion.Content>
     </Accordion.Item>
 }
 
-export default function BondList({ bonds }: { bonds: Bond[] }): JSX.Element {
-    const tableRows = bonds.map(bond => <BondRow bond={bond} key={bond.id} />);
+export default function BondList({ bonds, onDeleteBondCommand }: {
+    bonds: Bond[],
+    onDeleteBondCommand: (id: string) => void
+}): JSX.Element {
+    console.log("rendering BondList with length", bonds.length);
+    const tableRows = bonds.map(bond =>
+        <BondRow bond={bond} key={bond.id} onDeleteBondCommand={onDeleteBondCommand} />);
     return <div>
         <Accordion.Root type='multiple'>
             {tableRows}
