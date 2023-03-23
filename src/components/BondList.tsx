@@ -1,5 +1,5 @@
 import * as Accordion from '@radix-ui/react-accordion';
-import { ChevronDownIcon } from '@radix-ui/react-icons';
+import { ChevronDownIcon, Pencil1Icon, TrashIcon } from '@radix-ui/react-icons';
 import { Bond, BondValue } from '../model/bond';
 import { formatMonth } from '../utils/date';
 import { formatDollars, formatPercent } from '../utils/math';
@@ -74,6 +74,10 @@ function BondRow({ bond }: { bond: Bond }): JSX.Element {
             </div>
         </Accordion.Header>
         <Accordion.Content>
+            <div style={{ "display": "flex", "justifyContent": "center" }}>
+                <button className="editButton"><Pencil1Icon className='inlineIcon' /> Edit</button>
+                <button className="editButton"><TrashIcon className='inlineIcon' /> Delete</button>
+            </div>
             <BondDetailTable bond={bond} values={values}></BondDetailTable>
         </Accordion.Content>
     </Accordion.Item>

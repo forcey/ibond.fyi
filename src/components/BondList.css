@@ -19,6 +19,7 @@
 
 table {
     margin-left: 0.6em;
+    margin-top: 8px;
 }
 
 th,
@@ -59,4 +60,16 @@ h3 {
     .AccordionItem:nth-child(odd) {
         background: #f9f9f9;
     }
+}
+
+.editButton {
+    background-color: hsl(235deg 37% 23%);
+    margin: 0 8px;
+}
+
+.inlineIcon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
 }
