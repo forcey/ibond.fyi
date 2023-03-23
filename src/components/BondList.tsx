@@ -90,7 +90,6 @@ export default function BondList({ bonds, onDeleteBondCommand }: {
     bonds: Bond[],
     onDeleteBondCommand: (id: string) => void
 }): JSX.Element {
-    console.log("rendering BondList with length", bonds.length);
     const tableRows = bonds.map(bond =>
         <BondRow bond={bond} key={bond.id} onDeleteBondCommand={onDeleteBondCommand} />);
     return <div>
