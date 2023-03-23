@@ -1,9 +1,10 @@
 import * as Accordion from '@radix-ui/react-accordion';
-import { ChevronDownIcon, InfoCircledIcon } from '@radix-ui/react-icons';
+import { ChevronDownIcon } from '@radix-ui/react-icons';
 import { Bond, BondValue } from '../model/bond';
 import { formatMonth } from '../utils/date';
 import { formatDollars, formatPercent } from '../utils/math';
 import './BondList.css';
+import { InfoPopover } from './InfoPopover';
 
 function TableCell({ label, children, style }: { label?: string, children: React.ReactNode, style?: React.CSSProperties }): JSX.Element {
     return <div className='tableCell' style={style}>
@@ -15,6 +16,8 @@ function TableCell({ label, children, style }: { label?: string, children: React
 function BondDetailTable({ bond, values }: { bond: Bond, values: BondValue[] }): JSX.Element {
     const valueRows = values.map((value, index) => {
         const redeemableValue = bond.redeemableValue(values, index);
+        const redeemableDate = new Date(bond.dateIssued);
+        redeemableDate.setFullYear(bond.dateIssued.getFullYear() + 1);
         return <tr key={index}>
             <td>{formatMonth(value.date)}</td>
             <td>{formatPercent(value.compositeRate, 2)}</td>
@@ -23,9 +26,10 @@ function BondDetailTable({ bond, values }: { bond: Bond, values: BondValue[] }):
                 <span className={redeemableValue.isRedeemable ? 'redeemable' : 'unredeemable'}>
                     {formatDollars(redeemableValue.value)}
                     {redeemableValue.isRedeemable ||
-                        <button className="IconButton">
-                            <InfoCircledIcon />
-                        </button>
+                        <InfoPopover>
+                            I-Bonds are not redeemable for the first 12 months after purchase.
+                            TreasuryDirect will display this value, even though this bond is not redeemable until {formatMonth(redeemableDate)}.
+                        </InfoPopover>
                     }
                 </span>
             </td>
@@ -54,7 +58,7 @@ function BondDetailTable({ bond, values }: { bond: Bond, values: BondValue[] }):
 function BondRow({ bond }: { bond: Bond }): JSX.Element {
     const values = bond.calculateValue();
 
-    const latestValue = bond.redeemableValue(values, values.length-1).value;
+    const latestValue = bond.redeemableValue(values, values.length - 1).value;
 
     return <Accordion.Item value={bond.id} className="AccordionItem">
         <Accordion.Header>
