@@ -16,3 +16,10 @@ export const Months = {
 export function formatMonth(date: Date): string {
     return date.toLocaleDateString("en-US", { "month": "short", "year": "numeric" });
 }
+
+export function parseYearMonth(yearMonth: string) {
+    const monthParts = yearMonth.split("-");
+    const year = parseInt(monthParts[0]);
+    const month = parseInt(monthParts[1]);
+    return new Date(year, month - 1);
+}

@@ -1,14 +1,19 @@
 import * as Accordion from '@radix-ui/react-accordion';
-import { ChevronDownIcon, Pencil1Icon, TrashIcon } from '@radix-ui/react-icons';
+import { CheckIcon, ChevronDownIcon, Pencil1Icon, TrashIcon } from '@radix-ui/react-icons';
+import { useState } from 'react';
 import { Bond, BondValue } from '../model/bond';
-import { formatMonth } from '../utils/date';
+import { formatMonth, parseYearMonth } from '../utils/date';
 import { formatDollars, formatPercent } from '../utils/math';
 import './BondList.css';
 import { InfoPopover } from './InfoPopover';
 
-function TableCell({ label, children, style }: { label?: string, children: React.ReactNode, style?: React.CSSProperties }): JSX.Element {
+function TableCell({ label, labelFor, children, style }: {
+    label?: string, labelFor?: string, children: React.ReactNode, style?: React.CSSProperties
+}): JSX.Element {
     return <div className='tableCell' style={style}>
-        {label && <div className='label'>{label}</div>}
+        {label && <div className='label'>
+            {labelFor ? <label htmlFor={labelFor}>{label}</label> : label}
+        </div>}
         <div className='text'>{children}</div>
     </div>;
 }
@@ -59,18 +64,64 @@ function BondRow({ bond, onDeleteBondCommand }: {
     bond: Bond,
     onDeleteBondCommand: (id: string) => void
 }): JSX.Element {
-    const values = bond.calculateValue();
+    const [editMode, setEditMode] = useState(false);
+    const [issueMonth, setIssueMonth] = useState("");
+    const [principal, setPrincipal] = useState("");
 
+    const startEdit = () => {
+        setEditMode(true);
+        setIssueMonth(bond.dateIssued.toISOString().substring(0, 7));
+        setPrincipal(bond.principal.toString());
+    }
+    const finishEdit = () => {
+        const dateIssued = parseYearMonth(issueMonth);
+        const principalValue = parseFloat(principal);
+        if (dateIssued != bond.dateIssued) {
+            console.log("date changed!", bond.dateIssued, dateIssued);
+        }
+        if (dateIssued != bond.dateIssued || principalValue !== bond.principal) {
+            bond.dateIssued = dateIssued;
+            bond.principal = principalValue;
+            // TODO: emit bond changed event
+            console.log("bond changed!", bond.dateIssued, bond.principal);
+        }
+        setEditMode(false);
+    }
+
+    const values = bond.calculateValue();
     const latestValue = bond.redeemableValue(values, values.length - 1).value;
 
-    return <Accordion.Item value={bond.id} className="AccordionItem">
+    const editModeClass = editMode ? " editMode" : "";
+    const buttons = editMode ?
+        <button className="editButton" onClick={e => finishEdit()}><CheckIcon className='inlineIcon' /> Done</button>
+        :
+        <>
+            <button className="editButton" onClick={e => startEdit()}><Pencil1Icon className='inlineIcon' /> Edit</button>
+            <button className="editButton" onClick={e => onDeleteBondCommand(bond.id)}><TrashIcon className='inlineIcon' /> Delete</button>
+        </>
+
+    const currentMonth = new Date().toISOString().substring(0, 7);
+    const tableCells = editMode ?
+        <>
+            <TableCell label="Month Issued" labelFor="issueMonth" style={{ "width": "fit-content" }}>
+                <input type="month" id="issueMonth" name="issueMonth"
+                    min="1998-09" max={currentMonth} value={issueMonth} onChange={e => setIssueMonth(e.currentTarget.value)} />
+            </TableCell>
+            <TableCell label="Principal" labelFor='principal' style={{ "width": "fit-content" }}>
+                <input type="number" id="principal" name="principal" min="0" max="10000" value={principal} onChange={e => setPrincipal(e.currentTarget.value)} />
+            </TableCell>
+        </> : <>
+            <TableCell label="Month Issued">{formatMonth(bond.dateIssued)}</TableCell>
+            <TableCell label="Principal">{formatDollars(bond.principal)}</TableCell>
+            <TableCell label="Value">{formatDollars(latestValue)}</TableCell>
+        </>
+
+    return <Accordion.Item value={bond.id} className={"AccordionItem" + editModeClass}>
         <Accordion.Header>
             <div className='tableRow'>
-                <TableCell label="Month Issued">{formatMonth(bond.dateIssued)}</TableCell>
-                <TableCell label="Principal">{formatDollars(bond.principal)}</TableCell>
-                <TableCell label="Value">{formatDollars(latestValue)}</TableCell>
+                {tableCells}
                 <TableCell style={{ "width": "auto", "marginLeft": "auto" }}>
-                    <Accordion.Trigger className='AccordionTrigger'>
+                    <Accordion.Trigger className='AccordionTrigger' disabled={editMode}>
                         <ChevronDownIcon className="AccordionChevron" aria-hidden />
                     </Accordion.Trigger>
                 </TableCell>
@@ -78,10 +129,9 @@ function BondRow({ bond, onDeleteBondCommand }: {
         </Accordion.Header>
         <Accordion.Content>
             <div style={{ "display": "flex", "justifyContent": "center" }}>
-                <button className="editButton"><Pencil1Icon className='inlineIcon' /> Edit</button>
-                <button className="editButton" onClick={e => onDeleteBondCommand(bond.id)}><TrashIcon className='inlineIcon' /> Delete</button>
+                {buttons}
             </div>
-            <BondDetailTable bond={bond} values={values}></BondDetailTable>
+            {editMode || <BondDetailTable bond={bond} values={values}></BondDetailTable>}
         </Accordion.Content>
     </Accordion.Item>
 }

@@ -48,8 +48,17 @@ h3 {
     transform: rotate(180deg);
 }
 
+.AccordionTrigger:disabled{
+    color: gray;
+}
+
 .AccordionItem {
     border-radius: 8px;
+}
+
+.AccordionItem.editMode {
+    outline: 2px solid orange;
+    padding-bottom: 16px;
 }
 
 .AccordionItem:nth-child(odd) {
@@ -72,4 +81,10 @@ h3 {
     align-items: center;
     justify-content: center;
     vertical-align: middle;
+}
+
+input {
+    font-family: inherit;
+    font-size: inherit;
+    width: 7em;
 }
