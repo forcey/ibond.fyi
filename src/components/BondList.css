@@ -65,11 +65,6 @@ h3 {
     }
 }
 
-.editButton {
-    background-color: hsl(235deg 37% 23%);
-    margin: 0 8px;
-}
-
 .inlineIcon {
     display: inline-flex;
     align-items: center;
