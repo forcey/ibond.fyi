@@ -18,6 +18,15 @@ test("compositeRate", () => {
     expect(composite).toBe(0.0689);
 })
 
+test("compositeRate won't go below zero", () => {
+  // https://www.treasurydirect.gov/savings-bonds/i-bonds/i-bonds-interest-rates/
+  // Example for May 2015.
+  const fixedRate = { date: new Date(2015, Months.May, 1), rate: 0 };
+  const inflationRate = { date: new Date(2015, Months.May, 1), rate: -0.0080 };
+  const composite = compositeRate(fixedRate, inflationRate);
+  expect(composite).toBe(0);
+})
+
 test('calculateValue', () => {
     const bond = new Bond(new Date(2022, Months.April, 1), 10000);
     const values = bond.calculateValue();

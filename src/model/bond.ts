@@ -99,5 +99,5 @@ export class Bond {
 
 export function compositeRate(fixedRate: Rate, inflationRate: Rate): number {
     const composite = fixedRate.rate + 2 * inflationRate.rate + fixedRate.rate * inflationRate.rate;
-    return roundToDecimal(composite, 4);
+    return roundToDecimal(Math.max(0, composite), 4);
 }
