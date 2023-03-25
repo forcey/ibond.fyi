@@ -9,10 +9,10 @@ export function BondDetailTable({ bond, values }: { bond: Bond, values: BondValu
         const redeemableDate = new Date(bond.dateIssued);
         redeemableDate.setFullYear(bond.dateIssued.getFullYear() + 1);
         return <tr key={index}>
-            <td>{formatMonth(value.date)}</td>
+            <td className="whitespace-nowrap">{formatMonth(value.date)}</td>
             <td>{formatPercent(value.compositeRate, 2)}</td>
             <td>{formatDollars(value.value * value.multiplier)}</td>
-            <td>
+            <td className="whitespace-nowrap">
                 <span className={redeemableValue.isRedeemable ? '' : 'text-gray-500'}>
                     {formatDollars(redeemableValue.value)}
                     {redeemableValue.isRedeemable ||
@@ -31,7 +31,7 @@ export function BondDetailTable({ bond, values }: { bond: Bond, values: BondValu
         <table>
             <thead>
                 <tr>
-                    <th style={{ 'minWidth': '5em' }}>Month</th>
+                    <th>Month</th>
                     <th>Composite Rate</th>
                     <th>Accrued Value</th>
                     <th>Redeemable Value</th>
