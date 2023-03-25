@@ -7,16 +7,6 @@
     padding-left: 0.6em;
 }
 
-.tableCell {
-    padding: 4px;
-    width: calc(25% - 8px);
-    text-align: left;
-}
-
-.tableCell .label {
-    font-size: 50%;
-}
-
 table {
     margin-left: 0.6em;
     margin-top: 8px;

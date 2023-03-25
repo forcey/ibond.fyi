@@ -8,5 +8,5 @@ export function formatPercent(value: number, decimalPlaces: number): string {
 }
 
 export function formatDollars(value: number): string {
-    return `$${value.toLocaleString()}`;
+    return `$${value.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
 }

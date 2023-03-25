@@ -10,8 +10,8 @@ import './BondList.css';
 function TableCell({ label, labelFor, children, style }: {
     label?: string, labelFor?: string, children: React.ReactNode, style?: React.CSSProperties
 }): JSX.Element {
-    return <div className='tableCell' style={style}>
-        {label && <div className='label'>
+    return <div className='min-w-fit p-1 text-left' style={style}>
+        {label && <div className='text-[50%]'>
             {labelFor ? <label htmlFor={labelFor}>{label}</label> : label}
         </div>}
         <div className='text'>{children}</div>
@@ -34,14 +34,10 @@ function BondRow({ bond, onDeleteBondCommand }: {
     const finishEdit = () => {
         const dateIssued = parseYearMonth(issueMonth);
         const principalValue = parseFloat(principal);
-        if (dateIssued != bond.dateIssued) {
-            console.log("date changed!", bond.dateIssued, dateIssued);
-        }
         if (dateIssued != bond.dateIssued || principalValue !== bond.principal) {
             bond.dateIssued = dateIssued;
             bond.principal = principalValue;
             // TODO: emit bond changed event
-            console.log("bond changed!", bond.dateIssued, bond.principal);
         }
         setEditMode(false);
     }

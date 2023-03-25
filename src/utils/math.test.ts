@@ -12,6 +12,7 @@ test('formatPercent', () => {
 })
 
 test('formatDollars', () => {
-    expect(formatDollars(123456789)).toBe('$123,456,789');
-    expect(formatDollars(255)).toBe('$255');
+    expect(formatDollars(123456789)).toBe('$123,456,789.00');
+    expect(formatDollars(255)).toBe('$255.00');
+    expect(formatDollars(123.4567)).toBe('$123.46');
 })
