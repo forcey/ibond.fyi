@@ -1,5 +1,5 @@
 import * as Accordion from '@radix-ui/react-accordion';
-import { CheckIcon, ChevronDownIcon, Pencil1Icon, TrashIcon } from '@radix-ui/react-icons';
+import { CheckIcon, ChevronDownIcon, Cross1Icon, Pencil1Icon, TrashIcon } from '@radix-ui/react-icons';
 import { useState } from 'react';
 import { Bond, BondValue } from '../model/bond';
 import { formatMonth, parseYearMonth } from '../utils/date';
@@ -87,17 +87,21 @@ function BondRow({ bond, onDeleteBondCommand }: {
         }
         setEditMode(false);
     }
+    const cancelEdit = () => {
+        setEditMode(false);
+    }
 
     const values = bond.calculateValue();
     const latestValue = bond.redeemableValue(values, values.length - 1).value;
 
     const editModeClass = editMode ? " editMode" : "";
     const buttons = editMode ?
-        <button className="editButton" onClick={e => finishEdit()}><CheckIcon className='inlineIcon' /> Done</button>
-        :
         <>
-            <button className="editButton" onClick={e => startEdit()}><Pencil1Icon className='inlineIcon' /> Edit</button>
-            <button className="editButton" onClick={e => onDeleteBondCommand(bond.id)}><TrashIcon className='inlineIcon' /> Delete</button>
+            <button className="editButton" onClick={e => finishEdit()} key="doneButton"><CheckIcon className='inlineIcon' /> Done</button>
+            <button className="editButton" onClick={e => cancelEdit()} key="cancelButton"><Cross1Icon className='inlineIcon' /> Cancel</button>
+        </> : <>
+            <button className="editButton" onClick={e => startEdit()} key="editButton"><Pencil1Icon className='inlineIcon' /> Edit</button>
+            <button className="editButton" onClick={e => onDeleteBondCommand(bond.id)} key="deleteButton"><TrashIcon className='inlineIcon' /> Delete</button>
         </>
 
     const currentMonth = new Date().toISOString().substring(0, 7);
