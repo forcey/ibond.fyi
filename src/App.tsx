@@ -1,3 +1,4 @@
+import { PlusIcon } from '@radix-ui/react-icons';
 import { useState } from 'react';
 import './App.css';
 import BondList from './components/BondList';
@@ -6,12 +7,7 @@ import { lookupRate } from './model/rateTable';
 import { Months } from './utils/date';
 
 function App() {
-  const [bonds, setBonds] = useState<Bond[]>([
-    new Bond(new Date(2021, Months.April, 1), 10000),
-    new Bond(new Date(2022, Months.April, 1), 10000),
-    new Bond(new Date(2022, Months.October, 1), 10000),
-    new Bond(new Date(2023, Months.January, 1), 10000),
-  ]);
+  const [bonds, setBonds] = useState<Bond[]>([]);
   
   const currentRates = lookupRate(new Date());
   const compositeRateNow = (currentRates.fixedRate !== undefined && currentRates.inflationRate !== undefined) ?
@@ -20,6 +16,12 @@ function App() {
 
   const handleDeleteBond = (id: string) => {
     setBonds(bonds.filter((bond: Bond) => bond.id !== id));
+  }
+
+  const addBond = () => {
+    const bond = new Bond(new Date(), 0);
+    bond.isNew = true;
+    setBonds([...bonds, bond]);
   }
 
   return (
@@ -35,6 +37,7 @@ function App() {
 
       {/* TODO: add chart here */}
       <BondList bonds={bonds} onDeleteBondCommand={handleDeleteBond} />
+      <button className="mx-2 bg-blue-800" onClick={e => addBond()}><PlusIcon className='inlineIcon' /> Add Bond</button>
     </div>
   )
 }

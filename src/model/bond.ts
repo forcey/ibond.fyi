@@ -26,6 +26,7 @@ export class Bond {
     id: string;
     dateIssued: Date;
     principal: number;
+    isNew: boolean = false;
 
     constructor(dateIssued: Date, principal: number) {
         this.id = crypto.randomUUID();

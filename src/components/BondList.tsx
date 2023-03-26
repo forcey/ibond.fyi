@@ -22,7 +22,7 @@ function BondRow({ bond, onDeleteBondCommand }: {
     bond: Bond,
     onDeleteBondCommand: (id: string) => void
 }): JSX.Element {
-    const [editMode, setEditMode] = useState(false);
+    const [editMode, setEditMode] = useState(bond.isNew);
     const [issueMonth, setIssueMonth] = useState("");
     const [principal, setPrincipal] = useState("");
 
@@ -39,10 +39,14 @@ function BondRow({ bond, onDeleteBondCommand }: {
             bond.principal = principalValue;
             // TODO: emit bond changed event
         }
+        bond.isNew = false;
         setEditMode(false);
     }
     const cancelEdit = () => {
         setEditMode(false);
+        if (bond.isNew) {
+            onDeleteBondCommand(bond.id);
+        }
     }
 
     const values = bond.calculateValue();
@@ -98,10 +102,24 @@ export default function BondList({ bonds, onDeleteBondCommand }: {
     bonds: Bond[],
     onDeleteBondCommand: (id: string) => void
 }): JSX.Element {
+    const [openItems, setOpenItems] = useState<string[]>([]);
+
+    // Add any bonds that are new to the list of open items.
+    const editModeBonds = bonds.filter(bond => bond.isNew).map(bond => bond.id);
+    const newOpenItems: string[] = [];
+    editModeBonds.forEach(bondId => {
+        if (!openItems.includes(bondId)) {
+            newOpenItems.push(bondId);
+        }
+    });
+    if (newOpenItems.length > 0) {
+        setOpenItems(openItems.concat(newOpenItems));
+    }
+
     const tableRows = bonds.map(bond =>
         <BondRow bond={bond} key={bond.id} onDeleteBondCommand={onDeleteBondCommand} />);
-    return <div>
-        <Accordion.Root type='multiple'>
+    return <div className='my-4'>
+        <Accordion.Root type='multiple' value={openItems} onValueChange={setOpenItems}>
             {tableRows}
         </Accordion.Root>
     </div>
