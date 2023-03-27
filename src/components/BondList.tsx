@@ -14,7 +14,7 @@ function TableCell({ label, labelFor, children, className }: {
         {label && <div className='text-[50%]'>
             {labelFor ? <label htmlFor={labelFor}>{label}</label> : label}
         </div>}
-        <div className='text'>{children}</div>
+        <div>{children}</div>
     </div>;
 }
 
