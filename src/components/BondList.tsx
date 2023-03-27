@@ -7,10 +7,10 @@ import { formatDollars } from '../utils/math';
 import { BondDetailTable } from './BondDetailsTable';
 import './BondList.css';
 
-function TableCell({ label, labelFor, children, style }: {
-    label?: string, labelFor?: string, children: React.ReactNode, style?: React.CSSProperties
+function TableCell({ label, labelFor, children, className }: {
+    label?: string, labelFor?: string, children: React.ReactNode, className?: string
 }): JSX.Element {
-    return <div className='min-w-fit p-1 text-left' style={style}>
+    return <div className={'p-1 text-left ' + className}>
         {label && <div className='text-[50%]'>
             {labelFor ? <label htmlFor={labelFor}>{label}</label> : label}
         </div>}
@@ -22,7 +22,7 @@ function BondRow({ bond, onDeleteBondCommand }: {
     bond: Bond,
     onDeleteBondCommand: (id: string) => void
 }): JSX.Element {
-    const [editMode, setEditMode] = useState(bond.isNew);
+    const [editMode, setEditMode] = useState(false);
     const [issueMonth, setIssueMonth] = useState("");
     const [principal, setPrincipal] = useState("");
 
@@ -48,6 +48,9 @@ function BondRow({ bond, onDeleteBondCommand }: {
             onDeleteBondCommand(bond.id);
         }
     }
+    if (bond.isNew && !editMode) {
+        startEdit();
+    }
 
     const values = bond.calculateValue();
     const latestValue = bond.redeemableValue(values, values.length - 1).value;
@@ -64,25 +67,31 @@ function BondRow({ bond, onDeleteBondCommand }: {
 
     const currentMonth = new Date().toISOString().substring(0, 7);
     const tableCells = editMode ?
-        <>
-            <TableCell label="Month Issued" labelFor="issueMonth" style={{ "width": "fit-content" }}>
+        <div className='flex'>
+            <TableCell label="Month Issued" labelFor="issueMonth" className='min-w-[50%]'>
                 <input type="month" id="issueMonth" name="issueMonth"
-                    min="1998-09" max={currentMonth} value={issueMonth} onChange={e => setIssueMonth(e.currentTarget.value)} />
+                    min="1998-09" max={currentMonth} value={issueMonth}
+                    onChange={e => setIssueMonth(e.currentTarget.value)}
+                    className="p-1 border-solid border rounded-md invalid:border-pink-500 invalid:text-pink-600" />
+                <div className='text-xs text-pink-500 w-full hidden'>Issue month must be between September 1998 and {currentMonth}.</div>
             </TableCell>
-            <TableCell label="Principal" labelFor='principal' style={{ "width": "fit-content" }}>
-                <input type="number" id="principal" name="principal" min="0" max="10000" value={principal} onChange={e => setPrincipal(e.currentTarget.value)} />
+            <TableCell label="Principal" labelFor='principal' className='min-w-[50%]'>
+                <input type="number" id="principal" name="principal"
+                    min="25" max="10000" value={principal}
+                    onChange={e => setPrincipal(e.currentTarget.value)}
+                    className="p-1 border-solid border rounded-md invalid:border-pink-500 invalid:text-pink-600" />
             </TableCell>
-        </> : <>
-            <TableCell label="Month Issued">{formatMonth(bond.dateIssued)}</TableCell>
-            <TableCell label="Principal">{formatDollars(bond.principal)}</TableCell>
-            <TableCell label="Value">{formatDollars(latestValue)}</TableCell>
-        </>
+        </div> : <div className='flex'>
+            <TableCell label="Month Issued" className='whitespace-nowrap'>{formatMonth(bond.dateIssued)}</TableCell>
+            <TableCell label="Principal" className='whitespace-nowrap'>{formatDollars(bond.principal)}</TableCell>
+            <TableCell label="Value" className='whitespace-nowrap'>{formatDollars(latestValue)}</TableCell>
+        </div>
 
     return <Accordion.Item value={bond.id} className={"AccordionItem" + editModeClass}>
         <Accordion.Header>
             <div className='tableRow'>
                 {tableCells}
-                <TableCell style={{ "width": "auto", "marginLeft": "auto" }}>
+                <TableCell className='ml-auto'>
                     <Accordion.Trigger className='AccordionTrigger' disabled={editMode}>
                         <ChevronDownIcon className="AccordionChevron" aria-hidden />
                     </Accordion.Trigger>

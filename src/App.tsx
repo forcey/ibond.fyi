@@ -19,7 +19,7 @@ function App() {
   }
 
   const addBond = () => {
-    const bond = new Bond(new Date(), 0);
+    const bond = new Bond(new Date(), 1000);
     bond.isNew = true;
     setBonds([...bonds, bond]);
   }
