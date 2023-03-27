@@ -1,3 +1,0 @@
-- Project into future months (when rate is available)
-- Highlight current month's value
-- Total row

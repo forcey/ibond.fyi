@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+  <style>
+    .bg { fill: #0070e0; }
+    .icon { fill: #ffffff; }
+  </style>
+  <rect class="bg" x="2" y="2" width="20" height="20" rx="3" ry="3"/>
+  <path class="icon" d="M8,6h8v2H8V6Zm0,4h8v2H8V10Zm0,4h8v2H8V14Zm-4,0h2v2H4V14Zm0-4h2v2H4V10Zm0-4h2v2H4V6Z"/>
+  <circle class="icon" cx="5" cy="5" r="1"/>
+</svg>
