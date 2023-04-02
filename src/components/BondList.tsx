@@ -52,7 +52,7 @@ function BondRow({ bond, onDeleteBondCommand }: {
         startEdit();
     }
 
-    const values = bond.calculateValue();
+    const values = bond.calculateValue(new Date());
     const latestValue = bond.redeemableValue(values, values.length - 1).value;
 
     const editModeClass = editMode ? " editMode" : "";

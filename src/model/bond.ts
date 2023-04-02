@@ -34,9 +34,8 @@ export class Bond {
         this.principal = principal;
     }
 
-    calculateValue(): BondValue[] {
+    calculateValue(today: Date): BondValue[] {
         const values: BondValue[] = [];
-        const today = new Date();
         const { fixedRate } = lookupRate(this.dateIssued);
         if (fixedRate === undefined) {
             return values;
