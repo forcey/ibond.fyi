@@ -81,7 +81,7 @@ function BondRow({ bond, onDeleteBondCommand }: {
             <TableCell label="Month Issued" labelFor="issueMonth" className='min-w-[50%]'>
                 <input type="month" id="issueMonth" name="issueMonth"
                     ref={monthInput}
-                    min="1998-09" max={currentMonth} value={issueMonth}
+                    required min="1998-09" max={currentMonth} value={issueMonth}
                     onChange={e => setIssueMonth(e.currentTarget.value)}
                     className="p-1 font-sans text-base w-full box-border border-solid border rounded-md invalid:border-pink-500 invalid:text-pink-600" />
                 <div className='text-xs text-pink-500 w-full hidden'>Issue month must be between September 1998 and {currentMonth}.</div>
@@ -89,7 +89,7 @@ function BondRow({ bond, onDeleteBondCommand }: {
             <TableCell label="Principal" labelFor='principal' className='min-w-[50%]'>
                 $ <input type="number" id="principal" name="principal"
                     ref={principalInput}
-                    min="25" max="10000" value={principal}
+                    required min="25" max="10000" value={principal}
                     onChange={e => setPrincipal(e.currentTarget.value)}
                     className="p-1 font-sans text-base w-5/6 box-border border-solid border rounded-md invalid:border-pink-500 invalid:text-pink-600" />
                 <div className='text-xs text-pink-500 w-full hidden'>Principal must be between $25 and $10,000.</div>
