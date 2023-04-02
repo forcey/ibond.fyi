@@ -101,3 +101,12 @@ export function compositeRate(fixedRate: Rate, inflationRate: Rate): number {
     const composite = fixedRate.rate + 2 * inflationRate.rate + fixedRate.rate * inflationRate.rate;
     return roundToDecimal(Math.max(0, composite), 4);
 }
+
+export function effectiveRate(principal:number, redeemableValue: number, months: number): number {
+    // principal * (1 + r) ^ (months / 12) = redeemableValue
+    // r = (redeemableValue / principal) ^ (1 / (months / 12)) - 1
+    if (months == 0) {
+        return 0;
+    }
+    return Math.pow(redeemableValue / principal, 12 / months) - 1;
+}

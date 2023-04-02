@@ -1,6 +1,6 @@
 import { assert, expect, test } from 'vitest';
 import { Months } from '../utils/date';
-import { Bond ,compositeRate} from './bond';
+import { Bond, compositeRate, effectiveRate } from './bond';
 
 test('constructor', () => {
     const bond = new Bond(new Date(2022, Months.April, 1), 1000);
@@ -141,3 +141,11 @@ test('calculateValue', () => {
         },
       ]);
 })
+
+test('effectiveRate', () => {
+  expect(effectiveRate(100, 100, 0)).toBe(0);
+  expect(effectiveRate(100, 101, 1)).toBeCloseTo(0.1268);
+  expect(effectiveRate(100, 120, 12)).toBeCloseTo(0.2);
+  expect(effectiveRate(100, 120, 36)).toBeCloseTo(0.0626);
+})
+

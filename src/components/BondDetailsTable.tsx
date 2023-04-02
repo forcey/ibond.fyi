@@ -1,4 +1,4 @@
-import { Bond, BondValue } from "../model/bond";
+import { Bond, BondValue, effectiveRate } from "../model/bond";
 import { formatMonth } from "../utils/date";
 import { formatPercent, formatDollars } from "../utils/math";
 import { InfoPopover } from "./InfoPopover";
@@ -23,7 +23,7 @@ export function BondDetailTable({ bond, values }: { bond: Bond, values: BondValu
                     }
                 </span>
             </td>
-            <td>TODO</td>
+            <td>{formatPercent(effectiveRate(bond.principal, redeemableValue.value, index), 2)}</td>
         </tr>
     });
     // Make the table area scrollable.
