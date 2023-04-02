@@ -58,7 +58,7 @@ function BondRow({ bond, onDeleteBondCommand }: {
     const editModeClass = editMode ? " editMode" : "";
     const buttons = editMode ?
         <>
-            <button className="mx-2 bg-green-800" onClick={e => finishEdit()} key="doneButton"><CheckIcon className='inlineIcon' /> Done</button>
+            <button className="mx-2 bg-green-800" onClick={e => finishEdit()} key="doneButton" type="submit"><CheckIcon className='inlineIcon' /> Done</button>
             <button className="mx-2 bg-red-800" onClick={e => cancelEdit()} key="cancelButton"><Cross1Icon className='inlineIcon' /> Cancel</button>
         </> : <>
             <button className="mx-2 bg-blue-800" onClick={e => startEdit()} key="editButton"><Pencil1Icon className='inlineIcon' /> Edit</button>
@@ -89,22 +89,24 @@ function BondRow({ bond, onDeleteBondCommand }: {
         </div>
 
     return <Accordion.Item value={bond.id} className={"AccordionItem" + editModeClass}>
-        <Accordion.Header>
-            <div className='tableRow'>
-                {tableCells}
-                <TableCell className='ml-auto'>
-                    <Accordion.Trigger className='AccordionTrigger' disabled={editMode}>
-                        <ChevronDownIcon className="AccordionChevron" aria-hidden />
-                    </Accordion.Trigger>
-                </TableCell>
-            </div>
-        </Accordion.Header>
-        <Accordion.Content>
-            <div style={{ "display": "flex", "justifyContent": "center" }}>
-                {buttons}
-            </div>
-            {editMode || <BondDetailTable bond={bond} values={values}></BondDetailTable>}
-        </Accordion.Content>
+        <form>
+            <Accordion.Header>
+                <div className='tableRow'>
+                    {tableCells}
+                    <TableCell className='ml-auto'>
+                        <Accordion.Trigger className='AccordionTrigger' disabled={editMode}>
+                            <ChevronDownIcon className="AccordionChevron" aria-hidden />
+                        </Accordion.Trigger>
+                    </TableCell>
+                </div>
+            </Accordion.Header>
+            <Accordion.Content>
+                <div style={{ "display": "flex", "justifyContent": "center" }}>
+                    {buttons}
+                </div>
+                {editMode || <BondDetailTable bond={bond} values={values}></BondDetailTable>}
+            </Accordion.Content>
+        </form>
     </Accordion.Item>
 }
 
