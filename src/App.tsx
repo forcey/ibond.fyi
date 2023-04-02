@@ -37,7 +37,7 @@ function App() {
 
       {/* TODO: add chart here */}
       <BondList bonds={bonds} onDeleteBondCommand={handleDeleteBond} />
-      <button className="mx-2 bg-blue-800" onClick={e => addBond()}><PlusIcon className='inlineIcon' /> Add Bond</button>
+      <button className="mx-2 bg-blue-400 dark:bg-blue-800" onClick={e => addBond()}><PlusIcon className='inlineIcon' /> Add Bond</button>
     </div>
   )
 }
