@@ -1,6 +1,6 @@
 import * as Accordion from '@radix-ui/react-accordion';
 import { CheckIcon, ChevronDownIcon, Cross1Icon, Pencil1Icon, TrashIcon } from '@radix-ui/react-icons';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Bond } from '../model/bond';
 import { formatMonth, parseYearMonth } from '../utils/date';
 import { formatDollars } from '../utils/math';
@@ -25,6 +25,8 @@ function BondRow({ bond, onDeleteBondCommand }: {
     const [editMode, setEditMode] = useState(false);
     const [issueMonth, setIssueMonth] = useState("");
     const [principal, setPrincipal] = useState("");
+    const monthInput = useRef<HTMLInputElement>(null);
+    const principalInput = useRef<HTMLInputElement>(null);
 
     const startEdit = () => {
         setEditMode(true);
@@ -32,6 +34,14 @@ function BondRow({ bond, onDeleteBondCommand }: {
         setPrincipal(bond.principal.toString());
     }
     const finishEdit = () => {
+        // check validity of inputs
+        if (monthInput.current === null || principalInput.current === null) {
+            return;
+        }
+        if (!monthInput.current.checkValidity() || !principalInput.current.checkValidity()) {
+            return;
+        }
+
         const dateIssued = parseYearMonth(issueMonth);
         const principalValue = parseFloat(principal);
         if (dateIssued != bond.dateIssued || principalValue !== bond.principal) {
@@ -70,6 +80,7 @@ function BondRow({ bond, onDeleteBondCommand }: {
         <div className='flex'>
             <TableCell label="Month Issued" labelFor="issueMonth" className='min-w-[50%]'>
                 <input type="month" id="issueMonth" name="issueMonth"
+                    ref={monthInput}
                     min="1998-09" max={currentMonth} value={issueMonth}
                     onChange={e => setIssueMonth(e.currentTarget.value)}
                     className="p-1 font-sans text-base w-full box-border border-solid border rounded-md invalid:border-pink-500 invalid:text-pink-600" />
@@ -77,6 +88,7 @@ function BondRow({ bond, onDeleteBondCommand }: {
             </TableCell>
             <TableCell label="Principal" labelFor='principal' className='min-w-[50%]'>
                 $ <input type="number" id="principal" name="principal"
+                    ref={principalInput}
                     min="25" max="10000" value={principal}
                     onChange={e => setPrincipal(e.currentTarget.value)}
                     className="p-1 font-sans text-base w-5/6 box-border border-solid border rounded-md invalid:border-pink-500 invalid:text-pink-600" />
