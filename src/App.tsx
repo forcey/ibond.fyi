@@ -3,6 +3,7 @@ import { useState } from 'react';
 import BondList from './components/BondList';
 import { Bond, compositeRate } from './model/bond';
 import { lookupRate } from './model/rateTable';
+import { serialize } from './model/serialization';
 
 function App() {
   const [bonds, setBonds] = useState<Bond[]>([]);
@@ -15,12 +16,18 @@ function App() {
   const handleDeleteBond = (id: string) => {
     setBonds(bonds.filter((bond: Bond) => bond.id !== id));
   }
-
+  const handleBondChanged = (id: string) => {
+    updateHash();
+  }
   const addBond = () => {
     const bond = new Bond(new Date(), 1000);
     bond.isNew = true;
     setBonds([...bonds, bond]);
   }
+  const updateHash = () => {
+    window.location.hash = serialize(bonds.filter(b => !b.isNew));
+  }
+  updateHash();
 
   return (
     <div className="max-w-lg text-center p-4 m-auto">
@@ -34,7 +41,7 @@ function App() {
       }
 
       {/* TODO: add chart here */}
-      <BondList bonds={bonds} onDeleteBondCommand={handleDeleteBond} />
+      <BondList bonds={bonds} handleBondChanged={handleBondChanged} handleDeleteBond={handleDeleteBond} />
       <button className="mx-2 bg-blue-400 dark:bg-blue-800" onClick={e => addBond()}><PlusIcon className='inlineIcon' /> Add Bond</button>
     </div>
   )

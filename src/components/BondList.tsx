@@ -18,9 +18,10 @@ function TableCell({ label, labelFor, children, className }: {
     </div>;
 }
 
-function BondRow({ bond, onDeleteBondCommand }: {
+function BondRow({ bond, handleBondChanged, handleDeleteBond }: {
     bond: Bond,
-    onDeleteBondCommand: (id: string) => void
+    handleBondChanged: (id: string) => void,
+    handleDeleteBond: (id: string) => void,
 }): JSX.Element {
     const [editMode, setEditMode] = useState(false);
     const [issueMonth, setIssueMonth] = useState("");
@@ -44,18 +45,18 @@ function BondRow({ bond, onDeleteBondCommand }: {
 
         const dateIssued = parseYearMonth(issueMonth);
         const principalValue = parseFloat(principal);
+        bond.isNew = false;
         if (dateIssued != bond.dateIssued || principalValue !== bond.principal) {
             bond.dateIssued = dateIssued;
             bond.principal = principalValue;
-            // TODO: emit bond changed event
+            handleBondChanged(bond.id);
         }
-        bond.isNew = false;
         setEditMode(false);
     }
     const cancelEdit = () => {
         setEditMode(false);
         if (bond.isNew) {
-            onDeleteBondCommand(bond.id);
+            handleDeleteBond(bond.id);
         }
     }
     if (bond.isNew && !editMode) {
@@ -72,7 +73,7 @@ function BondRow({ bond, onDeleteBondCommand }: {
             <button className="mx-2 bg-red-400 dark:bg-red-800" onClick={e => cancelEdit()} key="cancelButton"><Cross1Icon className='inlineIcon' /> Cancel</button>
         </> : <>
             <button className="mx-2 bg-blue-400 dark:bg-blue-800" onClick={e => startEdit()} key="editButton"><Pencil1Icon className='inlineIcon' /> Edit</button>
-            <button className="mx-2 bg-red-400 dark:bg-red-800" onClick={e => onDeleteBondCommand(bond.id)} key="deleteButton"><TrashIcon className='inlineIcon' /> Delete</button>
+            <button className="mx-2 bg-red-400 dark:bg-red-800" onClick={e => handleDeleteBond(bond.id)} key="deleteButton"><TrashIcon className='inlineIcon' /> Delete</button>
         </>
 
     const currentMonth = new Date().toISOString().substring(0, 7);
@@ -120,9 +121,10 @@ function BondRow({ bond, onDeleteBondCommand }: {
     </Accordion.Item>
 }
 
-export default function BondList({ bonds, onDeleteBondCommand }: {
+export default function BondList({ bonds, handleBondChanged, handleDeleteBond }: {
     bonds: Bond[],
-    onDeleteBondCommand: (id: string) => void
+    handleBondChanged: (id: string) => void,
+    handleDeleteBond: (id: string) => void
 }): JSX.Element {
     const [openItems, setOpenItems] = useState<string[]>([]);
 
@@ -139,7 +141,7 @@ export default function BondList({ bonds, onDeleteBondCommand }: {
     }
 
     const tableRows = bonds.map(bond =>
-        <BondRow bond={bond} key={bond.id} onDeleteBondCommand={onDeleteBondCommand} />);
+        <BondRow bond={bond} key={bond.id} handleBondChanged={handleBondChanged} handleDeleteBond={handleDeleteBond} />);
     return <div className='my-4'>
         <Accordion.Root type='multiple' value={openItems} onValueChange={setOpenItems}>
             {tableRows}
