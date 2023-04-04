@@ -4,18 +4,25 @@ import { formatPercent, formatDollars } from "../utils/math";
 import { InfoPopover } from "./InfoPopover";
 
 export function BondDetailTable({ bond, values }: { bond: Bond, values: BondValue[] }): JSX.Element {
-    const valueRows = values.map((value, index) => {
+    const valueRows: JSX.Element[] = [];
+    var shownInfoPopover = false;
+    for (var index = values.length - 1; index >= 0; index--) {
+        const value = values[index];
         const redeemableValue = bond.redeemableValue(values, index);
         const redeemableDate = new Date(bond.dateIssued);
         redeemableDate.setFullYear(bond.dateIssued.getFullYear() + 1);
-        return <tr key={index}>
+
+        const showInfoPopover: boolean = !shownInfoPopover && !redeemableValue.isRedeemable;
+        shownInfoPopover ||= showInfoPopover;
+
+        valueRows.push(<tr key={index}>
             <td className="whitespace-nowrap">{formatMonth(value.date)}</td>
             <td>{formatPercent(value.compositeRate, 2)}</td>
             <td>{formatDollars(value.value * value.multiplier)}</td>
             <td className="whitespace-nowrap">
                 <span className={redeemableValue.isRedeemable ? '' : 'text-gray-500'}>
                     {formatDollars(redeemableValue.value)}
-                    {redeemableValue.isRedeemable ||
+                    {showInfoPopover &&
                         <InfoPopover>
                             I-Bonds are not redeemable for the first 12 months after purchase.
                             TreasuryDirect will display this value, even though this bond is not redeemable until {formatMonth(redeemableDate)}.
@@ -24,8 +31,8 @@ export function BondDetailTable({ bond, values }: { bond: Bond, values: BondValu
                 </span>
             </td>
             <td>{formatPercent(effectiveRate(bond.principal, redeemableValue.value, index), 2)}</td>
-        </tr>
-    });
+        </tr>);
+    }
     // Make the table area scrollable.
     return <div style={{ "overflow": "auto", "paddingBottom": "8px" }}>
         <table>
@@ -39,7 +46,7 @@ export function BondDetailTable({ bond, values }: { bond: Bond, values: BondValu
                 </tr>
             </thead>
             <tbody>
-                {valueRows.reverse()}
+                {valueRows}
             </tbody>
         </table>
     </div>;
