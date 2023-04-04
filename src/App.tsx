@@ -1,14 +1,12 @@
 import { PlusIcon } from '@radix-ui/react-icons';
 import { useState } from 'react';
-import './App.css';
 import BondList from './components/BondList';
 import { Bond, compositeRate } from './model/bond';
 import { lookupRate } from './model/rateTable';
-import { Months } from './utils/date';
 
 function App() {
   const [bonds, setBonds] = useState<Bond[]>([]);
-  
+
   const currentRates = lookupRate(new Date());
   const compositeRateNow = (currentRates.fixedRate !== undefined && currentRates.inflationRate !== undefined) ?
     compositeRate(currentRates.fixedRate, currentRates.inflationRate) :
@@ -25,7 +23,7 @@ function App() {
   }
 
   return (
-    <div className="App">
+    <div className="max-w-lg text-center p-4 m-auto">
       <h1>I-Bond Calculator</h1>
       {
         (compositeRateNow !== undefined) && (
