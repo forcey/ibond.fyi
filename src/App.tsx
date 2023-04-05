@@ -5,6 +5,11 @@ import { Bond, compositeRate } from './model/bond';
 import { lookupRate } from './model/rateTable';
 import { deserialize, serialize } from './model/serialization';
 
+
+import { ToastContainer, toast } from 'react-toastify';
+
+import 'react-toastify/dist/ReactToastify.css';
+
 function App() {
   const [bonds, setBonds] = useState<Bond[]>([]);
   const [initialized, setInitialized] = useState(false);
@@ -39,7 +44,7 @@ function App() {
   }
   const share = () => {
     navigator.clipboard.writeText(window.location.href);
-    // TODO: display a toast
+    toast.success("Link copied to clipboard!", {toastId: 'linkCopied'});
   }
 
   updateHash();
@@ -59,6 +64,9 @@ function App() {
       <BondList bonds={bonds} handleBondChanged={handleBondChanged} handleDeleteBond={handleDeleteBond} />
       <button className="mx-2 bg-blue-400 dark:bg-blue-800" onClick={e => addBond()}><PlusIcon className='inlineIcon' /> Add Bond</button>
       <button className="mx-2 bg-blue-400 dark:bg-blue-800" onClick={e => share()}><Share2Icon className='inlineIcon' /> Save / Share</button>
+
+      <ToastContainer position="bottom-center"
+        autoClose={5000}/>
     </div>
   )
 }
