@@ -27,3 +27,17 @@ test('serialization', () => {
     }
     expect(deserialized).toEqual(bonds);
 })
+
+test('deserialization removes invalid data', () => {
+    const bonds = [
+        new Bond(new Date(1998, Months.August, 1), 25),
+        new Bond(new Date(2022, Months.November, 1), 10001),
+        new Bond(new Date(2023, Months.April, 1), 12.34),
+        new Bond(new Date(2049, Months.April, 1), 1234),
+    ];
+
+    const serialized = serialize(bonds);
+    const deserialized = deserialize(serialized);
+    
+    expect(deserialized).toHaveLength(0);
+})

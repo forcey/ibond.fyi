@@ -30,7 +30,10 @@ export function deserialize(serialized: string): Bond[] {
     for (let i = 0; i < buffer.length; i += 4) {
         const monthIndex = dataView.getUint32(i) >> 20;
         const principalCents = dataView.getUint32(i) & 0x000FFFFF;
-        bonds.push(new Bond(new Date(epoch.getFullYear(), epoch.getMonth() + monthIndex), principalCents / 100));
+        const issueDate = new Date(epoch.getFullYear(), epoch.getMonth() + monthIndex);
+        if (monthIndex >= 0 && issueDate <= new Date() && principalCents >= 2500 && principalCents <= 1000000) {
+            bonds.push(new Bond(issueDate, principalCents / 100));
+        }
     }
     return bonds;
 }

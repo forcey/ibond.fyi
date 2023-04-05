@@ -3,10 +3,20 @@ import { useState } from 'react';
 import BondList from './components/BondList';
 import { Bond, compositeRate } from './model/bond';
 import { lookupRate } from './model/rateTable';
-import { serialize } from './model/serialization';
+import { deserialize, serialize } from './model/serialization';
 
 function App() {
   const [bonds, setBonds] = useState<Bond[]>([]);
+  const [initialized, setInitialized] = useState(false);
+
+  if (!initialized) {
+    const hash = window.location.hash;
+    if (hash.length > 1) {
+      const deserializedBonds = deserialize(hash.substring(1));
+      setBonds(deserializedBonds);
+    }
+    setInitialized(true);
+  }
 
   const currentRates = lookupRate(new Date());
   const compositeRateNow = (currentRates.fixedRate !== undefined && currentRates.inflationRate !== undefined) ?
