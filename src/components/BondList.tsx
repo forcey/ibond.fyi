@@ -78,7 +78,7 @@ function BondRow({ bond, handleBondChanged, handleDeleteBond }: {
 
     const currentMonth = new Date().toISOString().substring(0, 7);
     const tableCells = editMode ?
-        <div className='flex'>
+        <div className='flex w-full'>
             <TableCell label="Month Issued" labelFor="issueMonth" className='min-w-[50%]'>
                 <input type="month" id="issueMonth" name="issueMonth"
                     ref={monthInput}
@@ -93,10 +93,10 @@ function BondRow({ bond, handleBondChanged, handleDeleteBond }: {
                     onChange={e => setPrincipal(e.currentTarget.value)}
                     className="p-1 font-sans text-base w-5/6 box-border border-solid border rounded-md invalid:border-pink-500 invalid:text-pink-600" />
             </TableCell>
-        </div> : <div className='flex'>
-            <TableCell label="Month Issued" className='whitespace-nowrap'>{formatMonth(bond.dateIssued)}</TableCell>
-            <TableCell label="Principal" className='whitespace-nowrap'>{formatDollars(bond.principal)}</TableCell>
-            <TableCell label="Value" className='whitespace-nowrap'>{formatDollars(latestValue)}</TableCell>
+        </div> : <div className='flex w-full'>
+            <TableCell label="Month Issued" className='whitespace-nowrap min-w-[30%]'>{formatMonth(bond.dateIssued)}</TableCell>
+            <TableCell label="Principal" className='whitespace-nowrap min-w-[30%]'>{formatDollars(bond.principal)}</TableCell>
+            <TableCell label="Value" className='whitespace-nowrap min-w-[30%]'>{formatDollars(latestValue)}</TableCell>
         </div>
 
     return <Accordion.Item value={bond.id} className={"AccordionItem" + editModeClass}>
@@ -104,7 +104,7 @@ function BondRow({ bond, handleBondChanged, handleDeleteBond }: {
             <Accordion.Header>
                 <div className='tableRow'>
                     {tableCells}
-                    <TableCell className='ml-auto'>
+                    <TableCell className='ml-auto mr-[-80px]'>
                         <Accordion.Trigger className='AccordionTrigger' disabled={editMode}>
                             <ChevronDownIcon className="AccordionChevron" aria-hidden />
                         </Accordion.Trigger>
