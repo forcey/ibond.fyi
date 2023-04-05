@@ -1,4 +1,4 @@
-import { PlusIcon } from '@radix-ui/react-icons';
+import { PlusIcon, Share2Icon } from '@radix-ui/react-icons';
 import { useState } from 'react';
 import BondList from './components/BondList';
 import { Bond, compositeRate } from './model/bond';
@@ -37,6 +37,11 @@ function App() {
   const updateHash = () => {
     window.location.hash = serialize(bonds.filter(b => !b.isNew));
   }
+  const share = () => {
+    navigator.clipboard.writeText(window.location.href);
+    // TODO: display a toast
+  }
+
   updateHash();
 
   return (
@@ -53,6 +58,7 @@ function App() {
       {/* TODO: add chart here */}
       <BondList bonds={bonds} handleBondChanged={handleBondChanged} handleDeleteBond={handleDeleteBond} />
       <button className="mx-2 bg-blue-400 dark:bg-blue-800" onClick={e => addBond()}><PlusIcon className='inlineIcon' /> Add Bond</button>
+      <button className="mx-2 bg-blue-400 dark:bg-blue-800" onClick={e => share()}><Share2Icon className='inlineIcon' /> Save / Share</button>
     </div>
   )
 }
