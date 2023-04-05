@@ -29,7 +29,9 @@ export class Bond {
     isNew: boolean = false;
 
     constructor(dateIssued: Date, principal: number) {
-        this.id = crypto.randomUUID();
+        // crypto.randomUUID is only available under https context. Fall back to random string if not available.
+        this.id = crypto.randomUUID ? crypto.randomUUID() :
+            Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
         this.dateIssued = dateIssued;
         this.principal = principal;
     }
@@ -102,7 +104,7 @@ export function compositeRate(fixedRate: Rate, inflationRate: Rate): number {
     return roundToDecimal(Math.max(0, composite), 4);
 }
 
-export function effectiveRate(principal:number, redeemableValue: number, months: number): number {
+export function effectiveRate(principal: number, redeemableValue: number, months: number): number {
     // principal * (1 + r) ^ (months / 12) = redeemableValue
     // r = (redeemableValue / principal) ^ (1 / (months / 12)) - 1
     if (months == 0) {
