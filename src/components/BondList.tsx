@@ -6,6 +6,7 @@ import { formatMonth, parseYearMonth } from '../utils/date';
 import { formatDollars } from '../utils/math';
 import { BondDetailTable } from './BondDetailsTable';
 import './BondList.css';
+import { MonthInput } from './MonthInput';
 
 function TableCell({ label, labelFor, children, className }: {
     label?: string, labelFor?: string, children: React.ReactNode, className?: string
@@ -80,11 +81,9 @@ function BondRow({ bond, handleBondChanged, handleDeleteBond }: {
     const tableCells = editMode ?
         <div className='flex w-full'>
             <TableCell label="Month Issued" labelFor="issueMonth" className='min-w-[50%]'>
-                <input type="month" id="issueMonth" name="issueMonth"
-                    ref={monthInput}
-                    required min="1998-09" max={currentMonth} value={issueMonth}
-                    onChange={e => setIssueMonth(e.currentTarget.value)}
-                    className="p-1 font-sans text-base w-full box-border border-solid border rounded-md invalid:border-pink-500 invalid:text-pink-600" />
+                <MonthInput ref={monthInput}
+                    min="1998-09" max={currentMonth} value={issueMonth}
+                    onChange={setIssueMonth} />
             </TableCell>
             <TableCell label="Principal" labelFor='principal' className='min-w-[50%]'>
                 $ <input type="number" id="principal" name="principal"
