@@ -31,7 +31,7 @@ export const _MonthInput = React.forwardRef((props: {
 
     React.useImperativeHandle(ref, () => {
         return {
-            checkValidity: () => {
+            reportValidity: () => {
                 return valid;
             }
         };
@@ -78,12 +78,12 @@ export const MonthInput = React.forwardRef((props: {
 
     React.useImperativeHandle(ref, () => {
         return {
-            checkValidity: () => {
+            reportValidity: () => {
                 if (monthInput.current !== null) {
-                    return monthInput.current.checkValidity();;
+                    return monthInput.current.reportValidity();;
                 }
                 if (customInput.current !== null) {
-                    return customInput.current.checkValidity();
+                    return customInput.current.reportValidity();
                 }
                 return false;
             }

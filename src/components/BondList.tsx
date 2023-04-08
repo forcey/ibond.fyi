@@ -41,7 +41,7 @@ function BondRow({ bond, handleBondChanged, handleDeleteBond }: {
             e.preventDefault();
             return;
         }
-        if (!monthInput.current.checkValidity() || !principalInput.current.checkValidity()) {
+        if (!monthInput.current.reportValidity() || !principalInput.current.reportValidity()) {
             e.preventDefault();
             return;
         }
