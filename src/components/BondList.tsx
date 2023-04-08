@@ -35,12 +35,14 @@ function BondRow({ bond, handleBondChanged, handleDeleteBond }: {
         setIssueMonth(bond.dateIssued.toISOString().substring(0, 7));
         setPrincipal(bond.principal.toString());
     }
-    const finishEdit = () => {
+    const finishEdit = (e: React.MouseEvent<HTMLButtonElement>) => {
         // check validity of inputs
         if (monthInput.current === null || principalInput.current === null) {
+            e.preventDefault();
             return;
         }
         if (!monthInput.current.checkValidity() || !principalInput.current.checkValidity()) {
+            e.preventDefault();
             return;
         }
 
@@ -70,7 +72,7 @@ function BondRow({ bond, handleBondChanged, handleDeleteBond }: {
     const editModeClass = editMode ? " editMode" : "";
     const buttons = editMode ?
         <>
-            <button className="mx-2 bg-green-400 dark:bg-green-800" onClick={e => finishEdit()} key="doneButton" type="submit"><CheckIcon className='inlineIcon' /> Done</button>
+            <button className="mx-2 bg-green-400 dark:bg-green-800" onClick={finishEdit} key="doneButton" type="submit"><CheckIcon className='inlineIcon' /> Done</button>
             <button className="mx-2 bg-red-400 dark:bg-red-800" onClick={e => cancelEdit()} key="cancelButton"><Cross1Icon className='inlineIcon' /> Cancel</button>
         </> : <>
             <button className="mx-2 bg-blue-400 dark:bg-blue-800" onClick={e => startEdit()} key="editButton"><Pencil1Icon className='inlineIcon' /> Edit</button>
