@@ -1,12 +1,18 @@
 export type Rate = {
     date: Date,
-    rate: number
+    rate: number,
+    validThrough: Date,
 }
 
 export function parseRate(date: string, rate: string): Rate {
+    const issueDate = new Date(date);
+    const validThrough = new Date(date);
+    validThrough.setMonth(validThrough.getMonth() + 6);
+
     return {
-        date: new Date(date),
-        rate: parseFloat(rate) / 100
+        date: issueDate,
+        rate: parseFloat(rate) / 100,
+        validThrough: validThrough,
     }
 }
 
@@ -120,7 +126,13 @@ const inflationRateTable: Rate[] = [
 ];
 
 export function lookupRate(date: Date): { fixedRate: Rate | undefined, inflationRate: Rate | undefined } {
-    const fixedRate = fixedRateTable.find(rate => rate.date <= date);
-    const inflationRate = inflationRateTable.find(rate => rate.date <= date);
+    var fixedRate = fixedRateTable.find(rate => rate.date <= date);
+    var inflationRate = inflationRateTable.find(rate => rate.date <= date);
+    if (fixedRate !== undefined && date >= fixedRate.validThrough) {
+        fixedRate = undefined;
+    }
+    if (inflationRate !== undefined && date >= inflationRate.validThrough) {
+        inflationRate = undefined;
+    }
     return { fixedRate, inflationRate };
 }

@@ -44,7 +44,7 @@ function App() {
   }
   const share = () => {
     navigator.clipboard.writeText(window.location.href);
-    toast.success("Link copied to clipboard!", {toastId: 'linkCopied'});
+    toast.success("Link copied to clipboard!", { toastId: 'linkCopied' });
   }
 
   updateHash();
@@ -53,10 +53,18 @@ function App() {
     <div className="max-w-lg text-center p-4 m-auto">
       <h1>I-Bond Calculator</h1>
       {
-        (compositeRateNow !== undefined) && (
+        (compositeRateNow !== undefined) ? (
           <p>Current composite rate is <strong>{(compositeRateNow * 100).toFixed(2)}%</strong>.<br />
             <a href="https://www.treasurydirect.gov/savings-bonds/i-bonds/i-bonds-interest-rates/">Learn more</a>
           </p>
+        ) : (
+          <div className='
+            bg-amber-100 text-amber-900 border-amber-200
+            dark:bg-amber-950 dark:text-amber-300 dark:border-amber-700
+            border border-solid rounded-md p-2'>
+            This tool has not been updated with the latest rate.<br />
+            Results below may be incomplete.
+          </div>
         )
       }
 
@@ -66,7 +74,7 @@ function App() {
       <button className="mx-2 bg-blue-400 dark:bg-blue-800" onClick={e => share()}><Share2Icon className='inlineIcon' /> Save / Share</button>
 
       <ToastContainer position="bottom-center"
-        autoClose={5000}/>
+        autoClose={5000} />
     </div>
   )
 }

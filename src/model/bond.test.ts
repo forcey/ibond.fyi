@@ -1,6 +1,7 @@
 import { assert, expect, test } from 'vitest';
 import { Months } from '../utils/date';
 import { Bond, compositeRate, effectiveRate } from './bond';
+import { parseRate } from './rateTable';
 
 test('constructor', () => {
     const bond = new Bond(new Date(2022, Months.April, 1), 1000);
@@ -12,8 +13,8 @@ test('constructor', () => {
 test("compositeRate", () => {
     // https://www.treasurydirect.gov/savings-bonds/i-bonds/i-bonds-interest-rates/
     // Example for November 2022.
-    const fixedRate = { date: new Date(2022, Months.October, 1), rate: 0.004 };
-    const inflationRate = { date: new Date(2022, Months.October, 1), rate: 0.0324 };
+    const fixedRate = parseRate("2022-10-01", "0.4%");
+    const inflationRate = parseRate("2022-10-01", "3.24%");;
     const composite = compositeRate(fixedRate, inflationRate);
     expect(composite).toBe(0.0689);
 })
@@ -21,8 +22,8 @@ test("compositeRate", () => {
 test("compositeRate won't go below zero", () => {
   // https://www.treasurydirect.gov/savings-bonds/i-bonds/i-bonds-interest-rates/
   // Example for May 2015.
-  const fixedRate = { date: new Date(2015, Months.May, 1), rate: 0 };
-  const inflationRate = { date: new Date(2015, Months.May, 1), rate: -0.0080 };
+  const fixedRate = parseRate("2015-05-01", "0.0%");
+  const inflationRate = parseRate("2015-05-01", "-0.8%");
   const composite = compositeRate(fixedRate, inflationRate);
   expect(composite).toBe(0);
 })
