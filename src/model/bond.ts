@@ -97,6 +97,11 @@ export class Bond {
             isRedeemable: true,
         }
     }
+
+    getValueOfDate(today: Date): RedeemableValue {
+        const values = this.calculateValue(today);
+        return this.redeemableValue(values, values.length - 1);
+    }
 }
 
 export function compositeRate(fixedRate: Rate, inflationRate: Rate): number {

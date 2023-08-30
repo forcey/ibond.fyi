@@ -122,6 +122,18 @@ function BondRow({ bond, handleBondChanged, handleDeleteBond }: {
     </Accordion.Item>
 }
 
+function TotalRow({ bonds }: { bonds: Bond[] }): JSX.Element {
+    const principal = bonds.reduce((sum, bond) => sum + bond.principal, 0);
+    const value = bonds.reduce((sum, bond) => sum + bond.getValueOfDate(new Date()).value, 0);
+    return <div className='tableRow border rounded-md border-solid
+             bg-green-100 dark:bg-green-950
+             border-green-600 dark:border-green-500 py-2'>
+        <TableCell className='whitespace-nowrap min-w-[30%]'>Total</TableCell>
+        <TableCell label="Principal" className='whitespace-nowrap min-w-[30%]'>{formatDollars(principal)}</TableCell>
+        <TableCell label="Value" className='whitespace-nowrap min-w-[30%]'>{formatDollars(value)}</TableCell>
+    </div>
+}
+
 export default function BondList({ bonds, handleBondChanged, handleDeleteBond }: {
     bonds: Bond[],
     handleBondChanged: (id: string) => void,
@@ -147,5 +159,6 @@ export default function BondList({ bonds, handleBondChanged, handleDeleteBond }:
         <Accordion.Root type='multiple' value={openItems} onValueChange={setOpenItems}>
             {tableRows}
         </Accordion.Root>
+        <TotalRow bonds={bonds} />
     </div>
 }
