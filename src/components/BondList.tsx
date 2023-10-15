@@ -67,9 +67,7 @@ function BondRow({ bond, handleBondChanged, handleDeleteBond }: {
     }
 
     const values = bond.calculateValue();
-    // Get the last BondValue on or before the given date.
-    const currentMonthRowId = values.findLastIndex((value) => value.date <= new Date());
-    const latestValue = bond.redeemableValue(values, currentMonthRowId).value;
+    const latestValue = bond.getValueOfDate(values, new Date()).value;
 
     const editModeClass = editMode ? " editMode" : "";
     const buttons = editMode ?
@@ -126,7 +124,7 @@ function BondRow({ bond, handleBondChanged, handleDeleteBond }: {
 
 function TotalRow({ bonds }: { bonds: Bond[] }): JSX.Element {
     const principal = bonds.reduce((sum, bond) => sum + bond.principal, 0);
-    const value = bonds.reduce((sum, bond) => sum + bond.getValueOfDate(new Date()).value, 0);
+    const value = bonds.reduce((sum, bond) => sum + bond.getValueOfDate(bond.calculateValue(), new Date()).value, 0);
     return <div className='tableRow border rounded-md border-solid
              bg-green-100 dark:bg-green-950
              border-green-600 dark:border-green-500 py-2'>

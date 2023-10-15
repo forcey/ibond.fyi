@@ -98,11 +98,14 @@ export class Bond {
         }
     }
 
-    getValueOfDate(today: Date): RedeemableValue {
-        const values = this.calculateValue();
+    getValueOfDate(values: BondValue[], today: Date): RedeemableValue {
         // Get the last BondValue on or before the given date.
-        const i = values.findLastIndex((value) => value.date <= today);
-        return this.redeemableValue(values, i);
+        for (var i = values.length - 1; i >= 0; i--) {
+            if (values[i].date <= today) {
+                return this.redeemableValue(values, i);
+            }
+        }
+        return this.redeemableValue(values, 0);
     }
 }
 
