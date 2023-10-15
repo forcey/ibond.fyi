@@ -30,8 +30,8 @@ test("compositeRate won't go below zero", () => {
 
 test('calculateValue', () => {
     const bond = new Bond(new Date(2022, Months.April, 1), 10000);
-    const values = bond.calculateValue(new Date(2023, Months.March, 31));
-    expect(values).toEqual([
+    const values = bond.calculateValue();
+    expect(values.slice(0, 12)).toEqual([
         {
           "compositeRate": 0.0712,
           "date": new Date(2022, Months.April),
