@@ -66,8 +66,10 @@ function BondRow({ bond, handleBondChanged, handleDeleteBond }: {
         startEdit();
     }
 
-    const values = bond.calculateValue(new Date());
-    const latestValue = bond.redeemableValue(values, values.length - 1).value;
+    const values = bond.calculateValue();
+    // Get the last BondValue on or before the given date.
+    const currentMonthRowId = values.findLastIndex((value) => value.date <= new Date());
+    const latestValue = bond.redeemableValue(values, currentMonthRowId).value;
 
     const editModeClass = editMode ? " editMode" : "";
     const buttons = editMode ?

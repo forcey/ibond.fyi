@@ -12,15 +12,28 @@ export function BondDetailTable({ bond, values }: { bond: Bond, values: BondValu
         const redeemableDate = new Date(bond.dateIssued);
         redeemableDate.setFullYear(bond.dateIssued.getFullYear() + 1);
 
-        const showInfoPopover: boolean = !shownInfoPopover && !redeemableValue.isRedeemable;
+        const today = new Date();
+        const isFuture = value.date > today;
+        const isCurrentYearMonth = value.date.getFullYear() === today.getFullYear() &&
+            value.date.getMonth() === today.getMonth();
+        const rowTextClass = isFuture ? 'text-gray-500 italic' : isCurrentYearMonth ? 'font-bold' : '';
+        const valueTextClass = rowTextClass + (redeemableValue.isRedeemable ? '' : ' text-gray-500');
+
+        const showInfoPopover: boolean = !shownInfoPopover && !redeemableValue.isRedeemable && !isFuture;
         shownInfoPopover ||= showInfoPopover;
 
         valueRows.push(<tr key={index}>
-            <td className="whitespace-nowrap">{formatMonth(value.date)}</td>
-            <td>{formatPercent(value.compositeRate, 2)}</td>
-            <td>{formatDollars(value.value * value.multiplier)}</td>
             <td className="whitespace-nowrap">
-                <span className={redeemableValue.isRedeemable ? '' : 'text-gray-500'}>
+                <span className={rowTextClass}>{formatMonth(value.date)}</span>
+            </td>
+            <td>
+                <span className={rowTextClass}>{formatPercent(value.compositeRate, 2)}</span>
+            </td>
+            <td>
+                <span className={rowTextClass}>{formatDollars(value.value * value.multiplier)}</span>
+            </td>
+            <td className="whitespace-nowrap">
+                <span className={valueTextClass}>
                     {formatDollars(redeemableValue.value)}
                     {showInfoPopover &&
                         <InfoPopover>
@@ -30,7 +43,9 @@ export function BondDetailTable({ bond, values }: { bond: Bond, values: BondValu
                     }
                 </span>
             </td>
-            <td>{formatPercent(effectiveRate(bond.principal, redeemableValue.value, index), 2)}</td>
+            <td><span className={rowTextClass}>
+                {formatPercent(effectiveRate(bond.principal, redeemableValue.value, index), 2)}
+            </span></td>
         </tr>);
     }
     // Make the table area scrollable.

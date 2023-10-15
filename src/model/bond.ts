@@ -36,7 +36,7 @@ export class Bond {
         this.principal = principal;
     }
 
-    calculateValue(today: Date): BondValue[] {
+    calculateValue(): BondValue[] {
         const values: BondValue[] = [];
         const { fixedRate } = lookupRate(this.dateIssued);
         if (fixedRate === undefined) {
@@ -52,7 +52,7 @@ export class Bond {
             multiplier: this.principal / 25,
         }
         var months = 0;
-        for (var date = new Date(this.dateIssued); date <= today; date.setMonth(date.getMonth() + 1)) {
+        for (var date = new Date(this.dateIssued);; date.setMonth(date.getMonth() + 1)) {
             bondValue.date = new Date(date);
 
             // https://www.bogleheads.org/wiki/I_savings_bonds#How_interest_is_calculated
@@ -99,8 +99,10 @@ export class Bond {
     }
 
     getValueOfDate(today: Date): RedeemableValue {
-        const values = this.calculateValue(today);
-        return this.redeemableValue(values, values.length - 1);
+        const values = this.calculateValue();
+        // Get the last BondValue on or before the given date.
+        const i = values.findLastIndex((value) => value.date <= today);
+        return this.redeemableValue(values, i);
     }
 }
 
