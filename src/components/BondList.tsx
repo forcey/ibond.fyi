@@ -159,7 +159,7 @@ export default function BondList({ bonds, handleBondChanged, handleDeleteBond }:
         <Accordion.Root type='multiple' value={openItems} onValueChange={setOpenItems}>
             {tableRows}
         </Accordion.Root>
-        {(bonds.length > 1) && 
+        {(bonds.length > 1 && editModeBonds.length == 0) && 
             <TotalRow bonds={bonds} />}
     </div>
 }
