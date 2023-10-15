@@ -5,7 +5,6 @@ import { Bond, compositeRate } from './model/bond';
 import { lookupRate } from './model/rateTable';
 import { deserialize, serialize } from './model/serialization';
 
-
 import { ToastContainer, toast } from 'react-toastify';
 
 import 'react-toastify/dist/ReactToastify.css';
@@ -31,7 +30,8 @@ function App() {
   const handleDeleteBond = (id: string) => {
     setBonds(bonds.filter((bond: Bond) => bond.id !== id));
   }
-  const handleBondChanged = (id: string) => {
+  const handleBondChanged = (id: string, newBond: Bond) => {
+    setBonds(bonds.map((bond: Bond) => bond.id === id ? newBond : bond));
     updateHash();
   }
   const addBond = () => {

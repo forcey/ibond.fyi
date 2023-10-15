@@ -21,7 +21,7 @@ function TableCell({ label, labelFor, children, className }: {
 
 function BondRow({ bond, handleBondChanged, handleDeleteBond }: {
     bond: Bond,
-    handleBondChanged: (id: string) => void,
+    handleBondChanged: (id: string, newBond: Bond) => void,
     handleDeleteBond: (id: string) => void,
 }): JSX.Element {
     const [editMode, setEditMode] = useState(false);
@@ -52,7 +52,7 @@ function BondRow({ bond, handleBondChanged, handleDeleteBond }: {
         if (dateIssued != bond.dateIssued || principalValue !== bond.principal) {
             bond.dateIssued = dateIssued;
             bond.principal = principalValue;
-            handleBondChanged(bond.id);
+            handleBondChanged(bond.id, bond);
         }
         setEditMode(false);
     }
@@ -136,7 +136,7 @@ function TotalRow({ bonds }: { bonds: Bond[] }): JSX.Element {
 
 export default function BondList({ bonds, handleBondChanged, handleDeleteBond }: {
     bonds: Bond[],
-    handleBondChanged: (id: string) => void,
+    handleBondChanged: (id: string, newBond: Bond) => void,
     handleDeleteBond: (id: string) => void
 }): JSX.Element {
     const [openItems, setOpenItems] = useState<string[]>([]);
@@ -159,6 +159,7 @@ export default function BondList({ bonds, handleBondChanged, handleDeleteBond }:
         <Accordion.Root type='multiple' value={openItems} onValueChange={setOpenItems}>
             {tableRows}
         </Accordion.Root>
-        <TotalRow bonds={bonds} />
+        {(bonds.length > 1) && 
+            <TotalRow bonds={bonds} />}
     </div>
 }
