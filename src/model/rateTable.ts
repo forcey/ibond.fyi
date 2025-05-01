@@ -18,6 +18,7 @@ export function parseRate(date: string, rate: string): Rate {
 
 // https://www.treasurydirect.gov/savings-bonds/i-bonds/i-bonds-interest-rates/
 const fixedRateTable: Rate[] = [
+    parseRate("May 1, 2025", "1.10%"),
     parseRate("November 1, 2024", "1.20%"),
     parseRate("May 1, 2024", "1.30%"),
     parseRate("November 1, 2023", "1.30%"),
@@ -75,6 +76,7 @@ const fixedRateTable: Rate[] = [
 ];
 
 const inflationRateTable: Rate[] = [
+    parseRate("May 1, 2025", "1.43%"),
     parseRate("November 1, 2024", "0.95%"),
     parseRate("May 1, 2024", "1.48%"),
     parseRate("November 1, 2023", "1.97%"),
